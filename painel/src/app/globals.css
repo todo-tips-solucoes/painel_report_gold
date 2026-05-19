@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Design tokens espelhados como CSS variables para que componentes que
+ * recebem cor como string literal (Recharts inline styles, terceiros sem
+ * Tailwind) referenciem o mesmo sistema. Mantenha em sincronia com
+ * tailwind.config.ts.
+ */
+:root {
+  --ds-border: hsl(220 13% 91%);
+  --ds-background: hsl(220 33% 99.2%);
+  --ds-foreground: hsl(222 47% 11%);
+  --ds-muted: hsl(220 33% 96%);
+  --ds-muted-foreground: hsl(215 16% 47%);
+  --ds-primary: hsl(221 83% 53%);
+  --ds-primary-foreground: hsl(220 33% 98.5%);
+  --ds-destructive: hsl(0 84% 60%);
+  --ds-success: hsl(142 71% 45%);
+  --ds-warning: hsl(38 92% 50%);
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-feature-settings: "rlig" 1, "calt" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

@@ -1,0 +1,291 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-05-19T00:00:00Z",
+  "title": "Design System: Painel de Relatórios — CLIENTE_X",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Telemetry Blue",
+        "canonical": "oklch(54% 0.22 264)",
+        "tonalRamp": [
+          "oklch(20% 0.12 264)",
+          "oklch(28% 0.16 264)",
+          "oklch(36% 0.20 264)",
+          "oklch(44% 0.22 264)",
+          "oklch(54% 0.22 264)",
+          "oklch(66% 0.18 264)",
+          "oklch(80% 0.10 264)",
+          "oklch(93% 0.04 264)"
+        ]
+      },
+      "primary-foreground": {
+        "role": "primary",
+        "displayName": "Paper White (warm)",
+        "canonical": "oklch(98% 0.005 264)",
+        "tonalRamp": [
+          "oklch(20% 0.04 264)",
+          "oklch(35% 0.03 264)",
+          "oklch(50% 0.02 264)",
+          "oklch(65% 0.015 264)",
+          "oklch(78% 0.01 264)",
+          "oklch(88% 0.008 264)",
+          "oklch(94% 0.005 264)",
+          "oklch(98% 0.005 264)"
+        ]
+      },
+      "background": {
+        "role": "neutral",
+        "displayName": "Paper White",
+        "canonical": "oklch(100% 0 0)",
+        "tonalRamp": [
+          "oklch(20% 0.04 264)",
+          "oklch(35% 0.03 264)",
+          "oklch(50% 0.02 264)",
+          "oklch(65% 0.015 264)",
+          "oklch(78% 0.01 264)",
+          "oklch(88% 0.005 264)",
+          "oklch(96% 0.003 264)",
+          "oklch(100% 0 0)"
+        ]
+      },
+      "foreground": {
+        "role": "neutral",
+        "displayName": "Ink Slate",
+        "canonical": "oklch(20% 0.04 264)",
+        "tonalRamp": [
+          "oklch(20% 0.04 264)",
+          "oklch(30% 0.04 264)",
+          "oklch(40% 0.035 264)",
+          "oklch(50% 0.03 264)",
+          "oklch(60% 0.025 264)",
+          "oklch(72% 0.02 264)",
+          "oklch(85% 0.012 264)",
+          "oklch(96% 0.005 264)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Mist",
+        "canonical": "oklch(97% 0.012 264)",
+        "tonalRamp": [
+          "oklch(25% 0.03 264)",
+          "oklch(40% 0.025 264)",
+          "oklch(55% 0.02 264)",
+          "oklch(70% 0.015 264)",
+          "oklch(82% 0.012 264)",
+          "oklch(90% 0.012 264)",
+          "oklch(95% 0.012 264)",
+          "oklch(97% 0.012 264)"
+        ]
+      },
+      "muted-foreground": {
+        "role": "neutral",
+        "displayName": "Slate Mid",
+        "canonical": "oklch(56% 0.04 264)",
+        "tonalRamp": [
+          "oklch(20% 0.04 264)",
+          "oklch(30% 0.04 264)",
+          "oklch(40% 0.04 264)",
+          "oklch(48% 0.04 264)",
+          "oklch(56% 0.04 264)",
+          "oklch(66% 0.035 264)",
+          "oklch(78% 0.025 264)",
+          "oklch(90% 0.015 264)"
+        ]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "oklch(92% 0.012 264)",
+        "tonalRamp": [
+          "oklch(25% 0.04 264)",
+          "oklch(40% 0.035 264)",
+          "oklch(55% 0.03 264)",
+          "oklch(70% 0.025 264)",
+          "oklch(82% 0.02 264)",
+          "oklch(88% 0.015 264)",
+          "oklch(92% 0.012 264)",
+          "oklch(97% 0.008 264)"
+        ]
+      },
+      "success": {
+        "role": "tertiary",
+        "displayName": "Confirm Green",
+        "canonical": "oklch(62% 0.20 145)",
+        "tonalRamp": [
+          "oklch(22% 0.10 145)",
+          "oklch(32% 0.14 145)",
+          "oklch(42% 0.18 145)",
+          "oklch(52% 0.20 145)",
+          "oklch(62% 0.20 145)",
+          "oklch(74% 0.16 145)",
+          "oklch(85% 0.10 145)",
+          "oklch(95% 0.04 145)"
+        ]
+      },
+      "warning": {
+        "role": "tertiary",
+        "displayName": "Caution Amber",
+        "canonical": "oklch(75% 0.17 70)",
+        "tonalRamp": [
+          "oklch(28% 0.10 70)",
+          "oklch(40% 0.13 70)",
+          "oklch(52% 0.16 70)",
+          "oklch(64% 0.18 70)",
+          "oklch(75% 0.17 70)",
+          "oklch(84% 0.14 70)",
+          "oklch(91% 0.08 70)",
+          "oklch(97% 0.03 70)"
+        ]
+      },
+      "destructive": {
+        "role": "tertiary",
+        "displayName": "Alert Red",
+        "canonical": "oklch(65% 0.23 25)",
+        "tonalRamp": [
+          "oklch(25% 0.12 25)",
+          "oklch(36% 0.16 25)",
+          "oklch(46% 0.20 25)",
+          "oklch(56% 0.22 25)",
+          "oklch(65% 0.23 25)",
+          "oklch(76% 0.18 25)",
+          "oklch(88% 0.10 25)",
+          "oklch(96% 0.04 25)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Valores principais de KPI (30px, semibold, tabular-nums)." },
+      "title": { "displayName": "Title", "purpose": "CardTitle e cabeçalhos de seção (16px, semibold)." },
+      "body": { "displayName": "Body", "purpose": "Texto base de UI, nav, célula de tabela, copy curta (14px)." },
+      "label": { "displayName": "Label", "purpose": "Rótulo uppercase de KPI, header de tabela, metadados (12px, letter-spacing 0.04em)." }
+    },
+    "shadows": [
+      { "name": "definition", "value": "0 1px 2px 0 rgb(0 0 0 / 0.05)", "purpose": "Única sombra em repouso — aplicada em cards e inputs. Função: 'isto é uma superfície', não elevação." },
+      { "name": "focus-ring", "value": "0 0 0 2px #2563eb", "purpose": "Ring de foco aplicado a elementos interativos via focus-visible. Único caminho de elevação por interação." }
+    ],
+    "motion": [
+      { "name": "color-transition", "value": "150ms cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "Transição de cor padrão (bg, border, text) — usada implicitamente via Tailwind transition-colors." },
+      { "name": "ease-out-quart", "value": "cubic-bezier(0.25, 1, 0.5, 1)", "purpose": "Easing recomendado para state changes; sem bounce, sem elastic." }
+    ],
+    "breakpoints": [
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Botão de ação principal. Telemetry Blue cheio, altura compacta, forma de pílula leve.",
+      "html": "<button class=\"ds-btn-primary\">Aplicar filtros</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 36px; padding: 0 16px; font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 14px; font-weight: 500; line-height: 1; color: #f7fafc; background: #2563eb; border: none; border-radius: 6px; cursor: pointer; transition: background-color 150ms cubic-bezier(0.22, 1, 0.36, 1); } .ds-btn-primary:hover { background: #1d4ed8; } .ds-btn-primary:focus-visible { outline: none; box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #2563eb; } .ds-btn-primary:disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Ação secundária. Mesma forma do primário; fundo Paper White com borda Hairline.",
+      "html": "<button class=\"ds-btn-outline\">Exportar</button>",
+      "css": ".ds-btn-outline { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 36px; padding: 0 16px; font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 14px; font-weight: 500; line-height: 1; color: #0f172a; background: #ffffff; border: 1px solid #e3e6ec; border-radius: 6px; cursor: pointer; transition: background-color 150ms cubic-bezier(0.22, 1, 0.36, 1); } .ds-btn-outline:hover { background: #f1f5f9; } .ds-btn-outline:focus-visible { outline: none; box-shadow: 0 0 0 2px #2563eb; }"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card-default",
+      "description": "Container padrão. Paper White com borda Hairline e shadow-sm de definição.",
+      "html": "<div class=\"ds-card\"><div class=\"ds-card-header\"><h3 class=\"ds-card-title\">Pipeline por origem</h3><p class=\"ds-card-desc\">Últimos 30 dias</p></div><div class=\"ds-card-body\">Conteúdo do card.</div></div>",
+      "css": ".ds-card { background: #ffffff; border: 1px solid #e3e6ec; border-radius: 8px; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); overflow: hidden; } .ds-card-header { padding: 16px 20px; border-bottom: 1px solid #e3e6ec; } .ds-card-title { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif; font-size: 16px; font-weight: 600; line-height: 1; letter-spacing: -0.005em; color: #0f172a; } .ds-card-desc { margin: 4px 0 0; font-size: 12px; line-height: 1.3; color: #64748b; } .ds-card-body { padding: 16px 20px; font-size: 14px; line-height: 1.45; color: #0f172a; }"
+    },
+    {
+      "name": "KPI Card",
+      "kind": "custom",
+      "refersTo": "card-default",
+      "description": "Componente assinatura do painel. Três níveis verticais: rótulo uppercase → valor grande tabular → contexto opcional. A cor do valor responde a tone semântico.",
+      "html": "<div class=\"ds-kpi\"><div class=\"ds-kpi-label\">Conversão pipeline</div><div class=\"ds-kpi-value ds-kpi-value-success\">42<span class=\"ds-kpi-unit\">%</span></div><div class=\"ds-kpi-context\"><span class=\"ds-kpi-ratio\">+3,2 pp</span><span>vs. 30 dias anteriores</span></div></div>",
+      "css": ".ds-kpi { background: #ffffff; border: 1px solid #e3e6ec; border-radius: 8px; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); padding: 16px 20px; } .ds-kpi-label { font-family: ui-sans-serif, system-ui, sans-serif; font-size: 12px; font-weight: 500; line-height: 1.3; letter-spacing: 0.04em; text-transform: uppercase; color: #64748b; } .ds-kpi-value { margin-top: 4px; font-family: ui-sans-serif, system-ui, sans-serif; font-size: 30px; font-weight: 600; line-height: 1.1; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; color: #0f172a; } .ds-kpi-value-success { color: #16a34a; } .ds-kpi-value-warning { color: #f59e0b; } .ds-kpi-value-destructive { color: #ef4444; } .ds-kpi-value-primary { color: #2563eb; } .ds-kpi-unit { margin-left: 2px; font-size: 18px; font-weight: 500; color: inherit; opacity: 0.7; } .ds-kpi-context { margin-top: 4px; display: flex; gap: 8px; font-size: 12px; line-height: 1.3; color: #64748b; } .ds-kpi-ratio { font-variant-numeric: tabular-nums; color: #16a34a; font-weight: 500; }"
+    },
+    {
+      "name": "Input",
+      "kind": "input",
+      "refersTo": "input-default",
+      "description": "Campo de texto padrão. Borda Hairline em repouso, ring Telemetry Blue em foco.",
+      "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"Buscar por médico ou origem\" />",
+      "css": ".ds-input { display: flex; width: 100%; height: 36px; padding: 0 12px; font-family: ui-sans-serif, system-ui, sans-serif; font-size: 14px; font-weight: 400; line-height: 1.45; color: #0f172a; background: #ffffff; border: 1px solid #e3e6ec; border-radius: 6px; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); transition: box-shadow 150ms cubic-bezier(0.22, 1, 0.36, 1); } .ds-input::placeholder { color: #64748b; } .ds-input:focus { outline: none; box-shadow: 0 0 0 2px #2563eb; } .ds-input:disabled { opacity: 0.5; cursor: not-allowed; }"
+    },
+    {
+      "name": "Nav Link (Active)",
+      "kind": "nav",
+      "refersTo": "nav-link-active",
+      "description": "Item de navegação no estado ativo. Único elemento de mancha primária persistente na app shell.",
+      "html": "<div class=\"ds-nav\"><a href=\"#\" class=\"ds-nav-link\">Home</a><a href=\"#\" class=\"ds-nav-link ds-nav-link-active\">Por Origem</a><a href=\"#\" class=\"ds-nav-link\">Atendimento</a><a href=\"#\" class=\"ds-nav-link\">Conexões</a><a href=\"#\" class=\"ds-nav-link\">Pipeline</a></div>",
+      "css": ".ds-nav { display: flex; flex-wrap: wrap; gap: 4px; } .ds-nav-link { padding: 6px 12px; font-family: ui-sans-serif, system-ui, sans-serif; font-size: 14px; font-weight: 400; line-height: 1; color: #64748b; background: transparent; border-radius: 6px; text-decoration: none; transition: background-color 150ms cubic-bezier(0.22, 1, 0.36, 1), color 150ms cubic-bezier(0.22, 1, 0.36, 1); } .ds-nav-link:hover { background: #f1f5f9; color: #0f172a; } .ds-nav-link-active { background: #2563eb; color: #f7fafc; } .ds-nav-link-active:hover { background: #1d4ed8; color: #f7fafc; } .ds-nav-link:focus-visible { outline: none; box-shadow: 0 0 0 2px #2563eb; }"
+    },
+    {
+      "name": "Badge (Primary)",
+      "kind": "chip",
+      "refersTo": "badge-primary",
+      "description": "Pílula tonal pequena. Fundo na cor a 10%, borda a 20%, texto na cor cheia. Cinco variantes por status.",
+      "html": "<span class=\"ds-badge ds-badge-primary\">CLIENTE_X</span> <span class=\"ds-badge ds-badge-success\">Em meta</span> <span class=\"ds-badge ds-badge-warning\">Atenção</span> <span class=\"ds-badge ds-badge-destructive\">Crítico</span>",
+      "css": ".ds-badge { display: inline-flex; align-items: center; padding: 2px 8px; font-family: ui-sans-serif, system-ui, sans-serif; font-size: 12px; font-weight: 500; line-height: 1.3; letter-spacing: 0.04em; border: 1px solid transparent; border-radius: 9999px; } .ds-badge-primary { background: rgba(37, 99, 235, 0.1); color: #2563eb; border-color: rgba(37, 99, 235, 0.2); } .ds-badge-success { background: rgba(22, 163, 74, 0.1); color: #16a34a; border-color: rgba(22, 163, 74, 0.2); } .ds-badge-warning { background: rgba(245, 158, 11, 0.1); color: #b45309; border-color: rgba(245, 158, 11, 0.2); } .ds-badge-destructive { background: rgba(239, 68, 68, 0.1); color: #ef4444; border-color: rgba(239, 68, 68, 0.2); }"
+    },
+    {
+      "name": "Data Table",
+      "kind": "custom",
+      "refersTo": "table-header",
+      "description": "Tabela primária do painel. Header em Mist+Label uppercase, linhas com borda Hairline e hover discreto.",
+      "html": "<table class=\"ds-table\"><thead class=\"ds-thead\"><tr><th class=\"ds-th\">Origem</th><th class=\"ds-th ds-th-num\">Leads</th><th class=\"ds-th ds-th-num\">Conv. %</th></tr></thead><tbody class=\"ds-tbody\"><tr class=\"ds-tr\"><td class=\"ds-td\">Instagram</td><td class=\"ds-td ds-td-num\">1.284</td><td class=\"ds-td ds-td-num\">38,2</td></tr><tr class=\"ds-tr\"><td class=\"ds-td\">Google Ads</td><td class=\"ds-td ds-td-num\">912</td><td class=\"ds-td ds-td-num\">44,1</td></tr><tr class=\"ds-tr\"><td class=\"ds-td\">Indicação</td><td class=\"ds-td ds-td-num\">347</td><td class=\"ds-td ds-td-num\">61,7</td></tr></tbody></table>",
+      "css": ".ds-table { width: 100%; border-collapse: collapse; font-family: ui-sans-serif, system-ui, sans-serif; font-size: 14px; color: #0f172a; } .ds-thead { background: rgba(241, 245, 249, 0.5); } .ds-th { height: 40px; padding: 0 12px; text-align: left; vertical-align: middle; font-size: 12px; font-weight: 500; line-height: 1.3; letter-spacing: 0.04em; text-transform: uppercase; color: #64748b; border-bottom: 1px solid #e3e6ec; } .ds-th-num { text-align: right; font-variant-numeric: tabular-nums; } .ds-tr { border-bottom: 1px solid #e3e6ec; transition: background-color 150ms cubic-bezier(0.22, 1, 0.36, 1); } .ds-tr:last-child { border-bottom: 0; } .ds-tr:hover { background: rgba(241, 245, 249, 0.3); } .ds-td { padding: 8px 12px; vertical-align: top; line-height: 1.45; } .ds-td-num { text-align: right; font-variant-numeric: tabular-nums; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Clinical Ledger",
+    "overview": "Um livro-razão clínico digital: a precisão tabular de um dashboard financeiro (Stripe) combinada com a generosidade espacial e o tom calmo de um documento de trabalho profissional (Notion). O painel não busca encantar — busca tornar o estado da operação legível em segundos, sem jargão e sem decoração que compita com o dado. O sistema rejeita explicitamente três caminhos: o template SaaS azul-índigo padrão, o clichê médico/clínico, e o BI corporativo de cards idênticos. Este DESIGN.md documenta o sistema como ele existe hoje (herdado dos defaults Tailwind/shadcn) e marca onde desvia da intenção alvo.",
+    "keyCharacteristics": [
+      "Light theme único; sem dark mode no produto atual.",
+      "Sans-serif system stack (sem fonte custom carregada ainda).",
+      "Flat-by-default: apenas shadow-sm em cards e inputs; sem elevação dramática.",
+      "Densidade média: cards com px-5 py-4, gaps moderados, texto base 14px.",
+      "Hierarquia tipográfica modesta hoje (text-3xl em KPI → text-base em título → text-xs em rótulo); precisa de mais contraste de escala.",
+      "Cor utilitária por status (success/warning/destructive) presente; uso em ≤5% da tela."
+    ],
+    "rules": [
+      { "name": "The One Accent Rule", "body": "Telemetry Blue carrega o papel de cor de ação. Em qualquer tela isolada, sua presença total não deve passar de 10% da área visível. Hoje o uso excede esse limite; a meta é reduzir.", "section": "colors" },
+      { "name": "The Status Trio Rule", "body": "Confirm Green, Caution Amber e Alert Red existem só para variação/estado de dado. Nunca decorativos, nunca em fundos cheios, nunca em texto de seção.", "section": "colors" },
+      { "name": "The Cool-Tinted Neutral Rule", "body": "Todos os cinzas são azulados (slate), não verdadeiros (gray). Misturar grays neutros com slates produz cinzas sujos. Sempre slate.", "section": "colors" },
+      { "name": "The Scale Gap Rule", "body": "Entre dois níveis adjacentes, o ratio mínimo é 1.25. Display/Title hoje pula 30→16 (ótimo). Title/Body pula 16→14 (abaixo do mínimo). Subir Title para 18px ou abaixar Body para 13px em superfícies densas.", "section": "typography" },
+      { "name": "The Tabular-Nums Rule", "body": "Qualquer número em coluna, série temporal, KPI ou linha de tabela usa font-variant-numeric: tabular-nums. Sem exceção.", "section": "typography" },
+      { "name": "The Single-Case Rule", "body": "Title Case nunca. UPPERCASE só em rótulo (label) e em status técnico. Tudo o mais é sentence case.", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "Superfícies são planas em repouso. Sombra densa, blur agressivo ou backdrop-filter em estado padrão são proibidos. A profundidade que importa é a hierarquia da informação.", "section": "elevation" },
+      { "name": "The No-Drop-Shadow Rule", "body": "Sombras grandes (shadow-md/lg/xl do Tailwind) não fazem parte do vocabulário. Se um elemento precisa flutuar, reavaliar o layout — geralmente é falta de hierarquia, não de sombra.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do usar Telemetry Blue como cor de ação, não de identidade decorativa. Botões primários, link ativo, ring de foco — pare aí.",
+      "Do aplicar tabular-nums em todo número que apareça em série, KPI, coluna ou linha de tabela. Sem exceção.",
+      "Do manter shadow-sm como a única sombra do vocabulário em repouso. Use ring de foco como única elevação interativa.",
+      "Do usar Status Trio (success/warning/destructive) apenas para sinalizar estado de dado: variação, conversão, alerta operacional.",
+      "Do acompanhar cor de status com forma ou rótulo (seta, sinal, palavra). Daltonismo vermelho-verde é o caso mais comum no público gestor.",
+      "Do preferir hierarquia tipográfica (peso + tamanho) para criar foco. O KpiCard é o modelo.",
+      "Do registrar densidade controlada: gap-4 entre KPIs, gap-6 entre seções, gap-2 dentro de um agrupamento próximo.",
+      "Do garantir foco visível por teclado em todo elemento interativo — focus-visible:ring-2 ring-primary é o padrão.",
+      "Do projetar com a hipótese 'este painel está dentro de um iframe': tipografia, contraste e tamanhos clicáveis precisam funcionar sob zoom/tema externo."
+    ],
+    "donts": [
+      "Don't parecer um template SaaS Bootstrap/AdminLTE: sidebar azul-índigo cheia, ícones genéricos lucide sem propósito, badges coloridos em cada linha, sombras médias por reflexo.",
+      "Don't parecer um clichê médico/clínico: azul-claro + branco + verde-saúde + ícone de cruz/estetoscópio. O público é gestor, não paciente.",
+      "Don't parecer BI corporativo genérico (Power BI/Tableau cru): grade de cards idênticos, três gráficos competindo por atenção, sensação de planilha colorida.",
+      "Don't usar gradientes (especialmente roxo/rosa), glassmorphism, glow neon, gradient text ou qualquer recurso de marketing AI-hype.",
+      "Don't usar #000 ou #fff puros em código novo. Tinte qualquer neutro pela hue azul da marca.",
+      "Don't usar border-left ou border-right maior que 1px como faixa de cor em card, linha de lista, alerta ou callout. Banido.",
+      "Don't empilhar cards dentro de cards. Card aninhado é sempre um erro de layout.",
+      "Don't criar uma grade de cards visualmente idênticos. Se há 6 KPIs, no mínimo o principal recebe Display maior, posição em destaque ou ocupa duas colunas.",
+      "Don't usar Status colors como decoração de marca, fundo de seção, divisor ou ícone genérico.",
+      "Don't usar em dash em copy. Use vírgula, dois pontos, ponto, parênteses.",
+      "Don't animar propriedades de layout (width, height, top, left, margin). Use transform e opacity. Easing exponencial ease-out, nunca bounce/elastic.",
+      "Don't assumir hover como único caminho para affordance — operadores em tablet de clínica não têm hover.",
+      "Don't introduzir uma fonte custom sem revisar a hierarquia da escada inteira."
+    ]
+  }
+}

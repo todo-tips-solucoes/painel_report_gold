@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+
+# Build artifacts
+.next/
+dist/
+*.tsbuildinfo
+out/
+
+# Secrets — never commit
+.env
+.env.local
+.env.*.local
+.pgrst.env
+*.pem
+*.key
+
+# Local binaries (rebuilt by tooling)
+painel/bin/cloudflared
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Claude Code per-user / per-machine state
+.claude/settings.local.json
+
+# Skills installed via skills-lock.json (reinstall via `npx skills add` / equivalent)
+.agents/
+.claude/skills/
+
+# Impeccable internals
+# Intencionalmente versionados: .impeccable/design.json e .impeccable/critique/
+.impeccable/cache/
+internal/
+*.bak
