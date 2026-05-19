@@ -3,6 +3,10 @@
 Painel embedável (iframe) para visualização de relatórios sobre o banco de chat
 multi-tenant, com lente sobre uma empresa por vez.
 
+**Repositório:** https://github.com/todo-tips-solucoes/painel_report_gold
+
+Veja também o [README na raiz](../README.md) com a visão geral do projeto.
+
 ## Stack
 
 - Next.js 15 (App Router, standalone output)
