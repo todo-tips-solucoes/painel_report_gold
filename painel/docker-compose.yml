@@ -8,7 +8,10 @@ services:
     ports:
       - "3000:3000"
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--spider", "http://localhost:3000/api/health"]
+      # 127.0.0.1 em vez de localhost: no Alpine, localhost resolve para ::1
+      # (IPv6), mas o Next standalone só ouve em 0.0.0.0 (IPv4).
+      test: ["CMD", "wget", "--quiet", "--spider", "http://127.0.0.1:3000/api/health"]
       interval: 30s
       timeout: 5s
       retries: 3
+      start_period: 10s
