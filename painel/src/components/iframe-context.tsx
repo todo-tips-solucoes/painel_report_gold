@@ -6,13 +6,29 @@ import { iframeParamsSchema, type IframeParams } from "@/lib/iframe-params";
 
 const Ctx = React.createContext<IframeParams | null>(null);
 
+/**
+ * Lê um param tolerando URL malformada do app pai. O `src` do iframe vem com
+ * `??companyId=20` em vez de `?companyId=20`, fazendo o navegador interpretar
+ * o nome do primeiro param como `"?companyId"`. Procuramos a chave canônica e
+ * variantes com `?` ou whitespace no prefixo. Quando o app pai consertar, esta
+ * normalização vira no-op.
+ */
+function readParam(search: URLSearchParams, key: string): string {
+  const direct = search.get(key);
+  if (direct !== null && direct !== "") return direct;
+  for (const [k, v] of search.entries()) {
+    if (k.replace(/^[?\s]+/, "") === key && v !== "") return v;
+  }
+  return "";
+}
+
 export function IframeContextProvider({ children }: { children: React.ReactNode }) {
   const search = useSearchParams();
   const raw = {
-    companyId: search.get("companyId") ?? "",
-    backendURL: search.get("backendURL") ?? "",
-    user_LoggedName: search.get("user_LoggedName") ?? "",
-    user_LoggedLevel: search.get("user_LoggedLevel") ?? "user",
+    companyId: readParam(search, "companyId"),
+    backendURL: readParam(search, "backendURL"),
+    user_LoggedName: readParam(search, "user_LoggedName"),
+    user_LoggedLevel: readParam(search, "user_LoggedLevel") || "user",
   };
   const parsed = iframeParamsSchema.safeParse(raw);
   if (!parsed.success) {
