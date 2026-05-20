@@ -63,11 +63,13 @@ CSP `frame-ancestors` in `next.config.ts` restricts which origins can embed. Con
 - **Explicit `Accept-Encoding: gzip, br`** in headers — the helper sets it; don't strip it.
 - The lib functions log timing breakdown (`ids=Xms fetch=Yms map=Zms total=Tms`) to stdout. Use these to diagnose slow queries.
 
-### Auth (Basic) on every route except health
+### Auth (optional Basic Auth via middleware)
 
-`painel/src/middleware.ts` enforces HTTP Basic Auth on all paths except `/api/health` and Next static assets. Activated when both `BASIC_AUTH_USER` and `BASIC_AUTH_PASS` are set (always in prod). Skip it locally by unsetting those vars.
+`painel/src/middleware.ts` supports HTTP Basic Auth on all paths except `/api/health` and Next static assets. **Disabled by default** — only activates when **both** `BASIC_AUTH_USER` and `BASIC_AUTH_PASS` are set in the environment. With them unset/commented (current state in production), the middleware is a no-op and the panel is accessible without prompt.
 
-The "Login" is per-browser-session; the parent iframe (chatmasterveloz hosts) is expected to already be authenticated, and the user clicks through Basic Auth once.
+Trade-off accepted: the panel is reachable by anyone who knows the URL. Acceptable because (a) data is internal/operational, not regulated; (b) CSP `frame-ancestors` blocks other sites from embedding the iframe; (c) Basic Auth in iframes provides terrible UX (re-prompts per session/device) without meaningful security against determined attackers.
+
+To re-enable: uncomment the two BASIC_AUTH lines in `painel/.env` and `docker compose up -d`.
 
 ## Page / data flow
 
@@ -82,6 +84,8 @@ Routes and what each consumes:
 | `/pipeline` | `/api/kpis/pipeline` | `src/lib/pipeline.ts` | `src/schemas/pipeline.ts` |
 
 Médicos (external API, not PostgREST): `src/lib/medicos.ts` fetches `MEDICOS_API_URL`, indexes by `tagId`, caches 24h. `/api/medicos` returns the cached index; `/api/medicos/refresh` (POST) invalidates and rebuilds. The "Médicos" refresh button in `/por-origem` filters calls this.
+
+**Cron diário (VPS)**: `crontab -e` na VPS tem entrada `0 7 * * *` (4h BRT = 7h UTC) que faz `POST /api/medicos/refresh` e loga em `/var/log/painel-medicos-refresh.log`. Garante que a lista esteja fresca todo dia sem depender de clique manual. Para inspecionar: `tail -5 /var/log/painel-medicos-refresh.log` mostra os últimos refreshes com timestamp + resposta JSON.
 
 ## Shared components (use these — don't reinvent)
 
