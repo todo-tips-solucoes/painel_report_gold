@@ -5,8 +5,32 @@ services:
     restart: unless-stopped
     env_file:
       - .env
-    ports:
-      - "3000:3000"
+    # Sem mapeamento público de portas: o painel só responde via Traefik.
+    # Para acessar localmente na VPS (debug), use: docker exec ou curl pela
+    # rede painel_default.
+    expose:
+      - "3000"
+    networks:
+      - default
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: painel_default
+      # Router HTTPS (principal) — gera cert Let's Encrypt automaticamente.
+      traefik.http.routers.painelgold.entrypoints: websecure
+      traefik.http.routers.painelgold.rule: Host(`painel.gold.chatmasterveloz.com`)
+      traefik.http.routers.painelgold.tls: "true"
+      traefik.http.routers.painelgold.tls.certresolver: leresolver
+      traefik.http.services.painelgold.loadbalancer.server.port: "3000"
+      # Router HTTP — redireciona para HTTPS. Necessário porque o catch-all
+      # global do Traefik (http-catchall) está com regra inválida após o
+      # upgrade para v3 (hostregexp → HostRegexp).
+      # Middleware declarado localmente: o redirect-to-https nas labels do
+      # container Traefik não é visível para outros containers via @docker.
+      traefik.http.middlewares.painelgold-https.redirectscheme.scheme: https
+      traefik.http.middlewares.painelgold-https.redirectscheme.permanent: "true"
+      traefik.http.routers.painelgold-http.entrypoints: web
+      traefik.http.routers.painelgold-http.rule: Host(`painel.gold.chatmasterveloz.com`)
+      traefik.http.routers.painelgold-http.middlewares: painelgold-https@docker
     healthcheck:
       # 127.0.0.1 em vez de localhost: no Alpine, localhost resolve para ::1
       # (IPv6), mas o Next standalone só ouve em 0.0.0.0 (IPv4).
@@ -15,3 +39,7 @@ services:
       timeout: 5s
       retries: 3
       start_period: 10s
+
+networks:
+  default:
+    name: painel_default
