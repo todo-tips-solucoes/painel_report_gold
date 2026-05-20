@@ -15,6 +15,7 @@ import {
   ReportErrorState,
   parseFetchError,
 } from "@/components/report-error-state";
+import { useCompany, companyLabel } from "@/components/use-company";
 import { defaultRange } from "@/lib/date-presets";
 import type { PorOrigemResponse } from "@/schemas/por-origem";
 
@@ -34,6 +35,8 @@ export default function PorOrigemPage() {
     const { from, to } = defaultRange();
     return { from, to, bucket: "all" };
   });
+  const { data: company } = useCompany(companyId);
+  const label = companyLabel(company, companyId);
   const [page, setPage] = React.useState(1);
   const pageSize = 50;
 
@@ -111,7 +114,7 @@ export default function PorOrigemPage() {
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             {companyId
-              ? `Operação #${companyId} · contatos do período, classificados por médico e tag CRM`
+              ? `Empresa ${label} · contatos do período, classificados por médico e tag CRM`
               : "Contatos do período, classificados por médico e tag CRM"}
           </p>
         </div>

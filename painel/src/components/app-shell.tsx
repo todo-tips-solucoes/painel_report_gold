@@ -4,6 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useIframeParams } from "@/components/iframe-context";
+import { useCompany, companyLabel } from "@/components/use-company";
 import { cn } from "@/lib/utils";
 
 const NAV = [
@@ -19,13 +20,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const search = useSearchParams();
   const qs = search.toString();
+  const { data: company } = useCompany(params.companyId);
+  const label = companyLabel(company, params.companyId);
 
   return (
     <div className="min-h-screen flex flex-col">
       <header className="border-b border-border bg-background">
         <div className="px-4 md:px-6 py-3 flex flex-wrap items-center gap-4">
-          <div className="font-semibold text-sm">
-            Empresa <span className="text-primary">#{params.companyId}</span>
+          <div
+            className="font-semibold text-sm max-w-[40ch] truncate"
+            title={company?.namecomplete || company?.name || undefined}
+          >
+            Empresa <span className="text-primary">{label}</span>
           </div>
           <nav className="flex flex-wrap gap-1">
             {NAV.map((n) => {

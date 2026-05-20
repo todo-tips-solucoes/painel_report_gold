@@ -18,6 +18,7 @@ import {
   parseFetchError,
 } from "@/components/report-error-state";
 import { PeriodChips } from "@/components/period-chips";
+import { useCompany, companyLabel } from "@/components/use-company";
 import { rangeLastNDays } from "@/lib/date-presets";
 import { fmtDuration, fmtPercent, fmtNumber } from "@/lib/format";
 import type { HomeResponse } from "@/schemas/home";
@@ -133,6 +134,8 @@ function Glossary() {
 export default function HomePage() {
   const { companyId } = useIframeParams();
   const queryClient = useQueryClient();
+  const { data: company } = useCompany(companyId);
+  const label = companyLabel(company, companyId);
   // Default 30d para os gráficos. Os KPIs do topo (Tickets hoje/7d/30d, TMA,
   // delivery, conexões, mensagens perdidas) ignoram o filtro — são leituras
   // de estado fixas que o usuário aprende a comparar entre si.
@@ -191,7 +194,7 @@ export default function HomePage() {
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             {companyId
-              ? `Operação #${companyId} · resumo dos últimos 30 dias`
+              ? `Empresa ${label} · resumo dos últimos 30 dias`
               : "Resumo dos últimos 30 dias"}
           </p>
         </div>

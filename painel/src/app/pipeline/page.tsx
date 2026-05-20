@@ -22,6 +22,7 @@ import {
 } from "@/components/report-error-state";
 import { InfoTooltip } from "@/components/ui/info-tooltip";
 import { PeriodChips } from "@/components/period-chips";
+import { useCompany, companyLabel } from "@/components/use-company";
 import { rangeLastNDays } from "@/lib/date-presets";
 import { fmtCurrencyBRL, fmtDateTime, fmtNumber } from "@/lib/format";
 import type { PipelineResponse } from "@/schemas/pipeline";
@@ -56,6 +57,8 @@ export default function PipelinePage() {
   const [pageSize, setPageSize] = React.useState(25);
   // Default 90d: oportunidades costumam ter ciclo mais longo que tickets.
   const [range, setRange] = React.useState(() => rangeLastNDays(90));
+  const { data: company } = useCompany(companyId);
+  const label = companyLabel(company, companyId);
 
   const qs = `companyId=${companyId}&from=${range.from}&to=${range.to}`;
   const query = useQuery<PipelineResponse>({
@@ -133,7 +136,7 @@ export default function PipelinePage() {
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             {companyId
-              ? `Operação #${companyId} · oportunidades e estágios do funil`
+              ? `Empresa ${label} · oportunidades e estágios do funil`
               : "Oportunidades e estágios do funil"}
           </p>
         </div>

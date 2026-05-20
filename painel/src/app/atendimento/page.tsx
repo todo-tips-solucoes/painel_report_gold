@@ -19,6 +19,7 @@ import {
 } from "@/components/report-error-state";
 import { InfoTooltip } from "@/components/ui/info-tooltip";
 import { PeriodChips } from "@/components/period-chips";
+import { useCompany, companyLabel } from "@/components/use-company";
 import { defaultRange } from "@/lib/date-presets";
 import { fmtDuration, fmtNumber, fmtPercent } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -121,6 +122,8 @@ export default function AtendimentoPage() {
   const { companyId } = useIframeParams();
   const queryClient = useQueryClient();
   const [range, setRange] = React.useState(() => defaultRange());
+  const { data: company } = useCompany(companyId);
+  const label = companyLabel(company, companyId);
 
   const qs = `companyId=${companyId}&from=${range.from}&to=${range.to}`;
   const query = useQuery<AtendimentoResponse>({
@@ -216,7 +219,7 @@ export default function AtendimentoPage() {
           </div>
           <p className="mt-1 text-sm text-muted-foreground">
             {companyId
-              ? `Operação #${companyId} · ${fmtNumber(data.ticketsInRange.total)} tickets no período`
+              ? `Empresa ${label} · ${fmtNumber(data.ticketsInRange.total)} tickets no período`
               : `${fmtNumber(data.ticketsInRange.total)} tickets no período`}
           </p>
         </div>

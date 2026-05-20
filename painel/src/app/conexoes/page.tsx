@@ -19,6 +19,7 @@ import {
   ReportErrorState,
   parseFetchError,
 } from "@/components/report-error-state";
+import { useCompany, companyLabel } from "@/components/use-company";
 import { InfoTooltip } from "@/components/ui/info-tooltip";
 import { fmtDuration, fmtNumber, fmtDateTime } from "@/lib/format";
 import type { ConexoesResponse, ConexaoRow } from "@/schemas/conexoes";
@@ -89,6 +90,8 @@ export default function ConexoesPage() {
   const queryClient = useQueryClient();
   const [page, setPage] = React.useState(1);
   const [pageSize, setPageSize] = React.useState(25);
+  const { data: company } = useCompany(companyId);
+  const label = companyLabel(company, companyId);
 
   const query = useQuery<ConexoesResponse>({
     queryKey: ["conexoes", companyId],
@@ -163,7 +166,7 @@ export default function ConexoesPage() {
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             {companyId
-              ? `Operação #${companyId} · status, carga e qualidade por canal`
+              ? `Empresa ${label} · status, carga e qualidade por canal`
               : "Status, carga e qualidade por canal"}
           </p>
         </div>
