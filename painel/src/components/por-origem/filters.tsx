@@ -5,9 +5,9 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { DateRangePicker } from "@/components/date-range-picker";
+import { PeriodChips } from "@/components/period-chips";
 import { Download, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { PRESETS, matchPreset, type PresetId } from "@/lib/date-presets";
 
 export type PorOrigemFilters = {
   from: string;
@@ -83,46 +83,12 @@ export function PorOrigemFilters({ value, onChange, onExportXlsx, onExportCsv, i
     return out.sort((a, b) => a.nome.localeCompare(b.nome));
   }, [medicos]);
 
-  const activePreset = matchPreset({ from: value.from, to: value.to });
-
-  const handlePresetClick = (id: PresetId) => {
-    const preset = PRESETS.find((p) => p.id === id);
-    if (!preset) return;
-    const { from, to } = preset.compute();
-    onChange({ ...value, from, to });
-  };
-
   return (
     <div className="rounded-lg bg-muted/30 px-4 py-3 space-y-3">
-      {/* Chips de presets temporais com auto-apply */}
-      <div className="flex flex-wrap items-center gap-1.5">
-        <span className="text-xs text-muted-foreground mr-1">Período:</span>
-        {PRESETS.map((p) => {
-          const isActive = activePreset === p.id;
-          return (
-            <button
-              key={p.id}
-              type="button"
-              onClick={() => handlePresetClick(p.id)}
-              aria-pressed={isActive}
-              className={cn(
-                "inline-flex h-7 items-center rounded-full border px-3 text-xs font-medium transition-colors",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
-                isActive
-                  ? "border-primary bg-primary text-primary-foreground"
-                  : "border-border bg-background text-foreground/80 hover:bg-muted hover:text-foreground",
-              )}
-            >
-              {p.label}
-            </button>
-          );
-        })}
-        {activePreset === null && (
-          <span className="text-xs text-muted-foreground italic ml-1">
-            personalizado
-          </span>
-        )}
-      </div>
+      <PeriodChips
+        value={{ from: value.from, to: value.to }}
+        onChange={({ from, to }) => onChange({ ...value, from, to })}
+      />
 
       {/* Linha de filtros: data + médico + UF + tipo + recorte + ações */}
       <div className="flex flex-wrap items-end gap-3">

@@ -17,6 +17,8 @@ import {
   ReportErrorState,
   parseFetchError,
 } from "@/components/report-error-state";
+import { PeriodChips } from "@/components/period-chips";
+import { rangeLastNDays } from "@/lib/date-presets";
 import { fmtDuration, fmtPercent, fmtNumber } from "@/lib/format";
 import type { HomeResponse } from "@/schemas/home";
 
@@ -131,10 +133,16 @@ function Glossary() {
 export default function HomePage() {
   const { companyId } = useIframeParams();
   const queryClient = useQueryClient();
+  // Default 30d para os gráficos. Os KPIs do topo (Tickets hoje/7d/30d, TMA,
+  // delivery, conexões, mensagens perdidas) ignoram o filtro — são leituras
+  // de estado fixas que o usuário aprende a comparar entre si.
+  const [range, setRange] = React.useState(() => rangeLastNDays(30));
+
+  const qs = `companyId=${companyId}&from=${range.from}&to=${range.to}`;
   const query = useQuery<HomeResponse>({
-    queryKey: ["home", companyId],
+    queryKey: ["home", companyId, range.from, range.to],
     queryFn: async () => {
-      const r = await fetch(`/api/kpis/home?companyId=${companyId}`);
+      const r = await fetch(`/api/kpis/home?${qs}`);
       if (!r.ok) throw new Error(`Falha ${r.status}: ${await r.text()}`);
       return r.json();
     },
@@ -196,6 +204,12 @@ export default function HomePage() {
           />
         </div>
       </header>
+
+      <PeriodChips
+        value={range}
+        onChange={setRange}
+        hint="afeta apenas os gráficos abaixo"
+      />
 
       {/* Linha 1 — hero + dois apoios */}
       <div className="grid gap-4 md:grid-cols-12">

@@ -18,6 +18,8 @@ import {
   parseFetchError,
 } from "@/components/report-error-state";
 import { InfoTooltip } from "@/components/ui/info-tooltip";
+import { PeriodChips } from "@/components/period-chips";
+import { defaultRange } from "@/lib/date-presets";
 import { fmtDuration, fmtNumber, fmtPercent } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { AtendimentoResponse } from "@/schemas/atendimento";
@@ -53,11 +55,11 @@ function StatusCard({
             hint: "Tickets que ainda não receberam atendimento.",
           }
         : {
-            label: "Fechados (30d)",
+            label: "Fechados",
             tone: "text-muted-foreground",
             dot: "bg-foreground/40",
             icon: CircleSlash,
-            hint: "Tickets finalizados nos últimos 30 dias.",
+            hint: "Tickets finalizados no período selecionado.",
           };
 
   const ratio = total > 0 ? value / total : 0;
@@ -112,16 +114,19 @@ function pickHero(data: AtendimentoResponse): HeroPick {
   if (data.mode === "ia" && data.iaAttribution.totalTickets > 0) {
     return { kind: "ia", pct: data.iaAttribution.pct };
   }
-  return { kind: "volume", value: data.tickets30d.total };
+  return { kind: "volume", value: data.ticketsInRange.total };
 }
 
 export default function AtendimentoPage() {
   const { companyId } = useIframeParams();
   const queryClient = useQueryClient();
+  const [range, setRange] = React.useState(() => defaultRange());
+
+  const qs = `companyId=${companyId}&from=${range.from}&to=${range.to}`;
   const query = useQuery<AtendimentoResponse>({
-    queryKey: ["atendimento", companyId],
+    queryKey: ["atendimento", companyId, range.from, range.to],
     queryFn: async () => {
-      const r = await fetch(`/api/kpis/atendimento?companyId=${companyId}`);
+      const r = await fetch(`/api/kpis/atendimento?${qs}`);
       if (!r.ok) throw new Error(`Falha ${r.status}: ${await r.text()}`);
       return r.json();
     },
@@ -187,7 +192,7 @@ export default function AtendimentoPage() {
   // "Em atendimento" = tickets abertos não fechados = total - closed - pending (estimativa via dado disponível)
   // Como o schema atual só expõe closed e pending, "Em atendimento" aproxima como max(total - closed - pending, 0).
   const ativos = Math.max(
-    data.tickets30d.total - data.tickets30d.closed - data.tickets30d.pending,
+    data.ticketsInRange.total - data.ticketsInRange.closed - data.ticketsInRange.pending,
     0,
   );
 
@@ -211,8 +216,8 @@ export default function AtendimentoPage() {
           </div>
           <p className="mt-1 text-sm text-muted-foreground">
             {companyId
-              ? `Operação #${companyId} · ${fmtNumber(data.tickets30d.total)} tickets nos últimos 30 dias`
-              : `${fmtNumber(data.tickets30d.total)} tickets nos últimos 30 dias`}
+              ? `Operação #${companyId} · ${fmtNumber(data.ticketsInRange.total)} tickets no período`
+              : `${fmtNumber(data.ticketsInRange.total)} tickets no período`}
           </p>
         </div>
         <FreshnessIndicator
@@ -223,6 +228,8 @@ export default function AtendimentoPage() {
         />
       </header>
 
+      <PeriodChips value={range} onChange={setRange} />
+
       {/* Banner explicativo modo IA */}
       {isIa && data.iaAttribution.totalTickets > 0 && (
         <Card className="border-primary/30 bg-primary/5">
@@ -231,7 +238,7 @@ export default function AtendimentoPage() {
             <div className="text-sm">
               <strong>Operação 100% automatizada detectada.</strong>{" "}
               {data.iaAttribution.withUser === 0
-                ? "Nenhum ticket atribuído a operador humano nos últimos 30 dias."
+                ? "Nenhum ticket atribuído a operador humano no período selecionado."
                 : `Apenas ${fmtNumber(data.iaAttribution.withUser)} de ${fmtNumber(data.iaAttribution.totalTickets)} tickets (${fmtPercent(data.iaAttribution.pct)}) atribuídos a operador humano.`}{" "}
               As métricas abaixo refletem desempenho da automação.
             </div>
@@ -248,20 +255,20 @@ export default function AtendimentoPage() {
           <StatusCard
             kind="active"
             value={ativos}
-            total={data.tickets30d.total}
+            total={data.ticketsInRange.total}
             help="Tickets que não estão fechados nem aguardando: foram atendidos mas continuam em outro estado (snooze, transferência, etc)."
           />
           <StatusCard
             kind="pending"
-            value={data.tickets30d.pending}
-            total={data.tickets30d.total}
+            value={data.ticketsInRange.pending}
+            total={data.ticketsInRange.total}
             help="Tickets que ainda não receberam a primeira resposta. Pendentes há mais de 24h são destacados separadamente abaixo."
           />
           <StatusCard
             kind="closed"
-            value={data.tickets30d.closed}
-            total={data.tickets30d.total}
-            help="Tickets resolvidos e fechados nos últimos 30 dias."
+            value={data.ticketsInRange.closed}
+            total={data.ticketsInRange.total}
+            help="Tickets resolvidos e fechados no período selecionado."
           />
         </div>
       </section>
@@ -285,19 +292,19 @@ export default function AtendimentoPage() {
               label="Atribuição IA"
               value={fmtPercent(1 - hero.pct, 1)}
               tone="primary"
-              caption={`${fmtPercent(1 - hero.pct, 1)} dos tickets passam pela automação sem operador humano nos últimos 30 dias.`}
+              caption={`${fmtPercent(1 - hero.pct, 1)} dos tickets passam pela automação sem operador humano no período.`}
               hint={`${fmtNumber(data.iaAttribution.totalTickets)} tickets analisados.`}
               help="Percentual de tickets processados sem atribuição a operador humano. Mede o quanto o fluxo de IA está absorvendo a operação."
             />
           ) : (
             <KpiCard
               variant="hero"
-              label="Volume total (30d)"
+              label="Volume total no período"
               value={hero.value}
               tone="primary"
-              caption={`${fmtNumber(hero.value)} tickets processados nos últimos 30 dias.`}
-              hint={`${fmtNumber(data.tickets30d.closed)} fechados · ${fmtNumber(data.tickets30d.pending)} pendentes`}
-              help="Soma de todos os tickets criados na operação nos últimos 30 dias, independente do status final."
+              caption={`${fmtNumber(hero.value)} tickets processados no período selecionado.`}
+              hint={`${fmtNumber(data.ticketsInRange.closed)} fechados · ${fmtNumber(data.ticketsInRange.pending)} pendentes`}
+              help="Soma de todos os tickets criados na operação dentro da janela escolhida, independente do status final."
             />
           )}
         </div>
@@ -326,7 +333,7 @@ export default function AtendimentoPage() {
           <KpiCard
             label="Taxa de fechamento"
             value={fmtPercent(data.conversao.closedRate, 1)}
-            hint={`${fmtNumber(data.tickets30d.closed)} de ${fmtNumber(data.tickets30d.total)} fechados`}
+            hint={`${fmtNumber(data.ticketsInRange.closed)} de ${fmtNumber(data.ticketsInRange.total)} fechados`}
             tone={data.conversao.closedRate < 0.5 ? "warning" : "success"}
             help="Percentual de tickets que foram fechados em relação ao total criado no período. Abaixo de 50% sinaliza acúmulo."
           />
@@ -338,7 +345,7 @@ export default function AtendimentoPage() {
           <CardHeader>
             <CardTitle>Distribuição por fila</CardTitle>
             <CardDescription>
-              Volume de tickets em cada fila ativa nos últimos 30 dias.
+              Volume de tickets em cada fila ativa dentro do período.
             </CardDescription>
           </CardHeader>
           <CardContent>

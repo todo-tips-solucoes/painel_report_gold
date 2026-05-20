@@ -1,16 +1,24 @@
 import { pgrstGet, pgrstGetAllPaginated } from "./pgrst";
 import { cacheGet, cacheSet } from "./cache";
-import { brtDaysAgoStart } from "./brt";
+import {
+  brtDaysAgoStart,
+  brtStartOfDay,
+  brtEndOfDayExclusive,
+  brtToday,
+} from "./brt";
+import { rangeLastNDays } from "./date-presets";
 import type { AtendimentoQuery, AtendimentoResponse, FilaStats } from "@/schemas/atendimento";
 
 const TTL_MS = 5 * 60_000;
 
-const isoStart = (daysAgo: number) => brtDaysAgoStart(daysAgo);
-
-async function sampleTpr(companyId: number, t30: string): Promise<{ median: number | null; p90: number | null; n: number }> {
-  // Sorteia até 80 tickets fechados em 30d e mede o tempo entre 1ª msg do cliente e 1ª msg da empresa.
+async function sampleTpr(
+  companyId: number,
+  windowStart: string,
+  windowEnd: string,
+): Promise<{ median: number | null; p90: number | null; n: number }> {
+  // Sorteia até 80 tickets fechados na janela e mede o tempo entre 1ª msg do cliente e 1ª msg da empresa.
   const tickets = await pgrstGet<Array<{ id: number }>>(
-    `/Tickets?companyId=eq.${companyId}&createdAt=gte.${t30}&status=eq.closed&select=id&order=id.desc&limit=80`,
+    `/Tickets?companyId=eq.${companyId}&createdAt=gte.${windowStart}&createdAt=lt.${windowEnd}&status=eq.closed&select=id&order=id.desc&limit=80`,
   );
   const deltas: number[] = [];
   await Promise.all(
@@ -38,17 +46,37 @@ async function sampleTpr(companyId: number, t30: string): Promise<{ median: numb
   };
 }
 
+/**
+ * Resolve `from`/`to` opcionais para uma janela `[start, end)` em ISO UTC.
+ * Default quando ambos ausentes: últimos 30 dias (compatível com comportamento anterior).
+ */
+function resolveWindow(
+  from?: string,
+  to?: string,
+): { range: { from: string; to: string }; startIso: string; endIso: string } {
+  const today = brtToday();
+  const defaultRange = rangeLastNDays(30);
+  const f = from ?? defaultRange.from;
+  const t = to ?? today;
+  return {
+    range: { from: f, to: t },
+    startIso: brtStartOfDay(f),
+    endIso: brtEndOfDayExclusive(t),
+  };
+}
+
 export async function fetchAtendimento(q: AtendimentoQuery): Promise<AtendimentoResponse> {
-  const key = `atendimento|${q.companyId}|${new Date().toISOString().slice(0, 13)}`;
+  const { range, startIso, endIso } = resolveWindow(q.from, q.to);
+  const key = `atendimento|${q.companyId}|${range.from}|${range.to}|${new Date().toISOString().slice(0, 13)}`;
   const cached = cacheGet<AtendimentoResponse>(key);
   if (cached) return cached;
 
-  const t30 = isoStart(30);
-  const t1 = isoStart(1);
+  // "Pending > 24h" é sempre relativo a agora (snapshot operacional), independe da janela.
+  const t1 = brtDaysAgoStart(1);
 
   const [allTicketsRaw, queuesRaw, withUserCount, trakingRaw, pendingOld] = await Promise.all([
     pgrstGetAllPaginated<{ queueId: number | null; status: string; userId: number | null }>(
-      `/Tickets?companyId=eq.${q.companyId}&createdAt=gte.${t30}&select=queueId,status,userId`,
+      `/Tickets?companyId=eq.${q.companyId}&createdAt=gte.${startIso}&createdAt=lt.${endIso}&select=queueId,status,userId`,
       1000,
       6,
     ).then((r) => r.data),
@@ -56,11 +84,11 @@ export async function fetchAtendimento(q: AtendimentoQuery): Promise<Atendimento
       `/Queues?companyId=eq.${q.companyId}&select=id,name`,
     ).then((r) => r.data),
     pgrstGet<unknown[]>(
-      `/Tickets?companyId=eq.${q.companyId}&createdAt=gte.${t30}&userId=not.is.null`,
+      `/Tickets?companyId=eq.${q.companyId}&createdAt=gte.${startIso}&createdAt=lt.${endIso}&userId=not.is.null`,
       { countExact: true, range: { from: 0, to: 0 } },
     ).then((r) => r.total ?? 0),
     pgrstGetAllPaginated<{ nextQueuesIds: unknown; queuesIds: string | null }>(
-      `/TicketTraking?companyId=eq.${q.companyId}&createdAt=gte.${t30}&select=queuesIds,nextQueuesIds`,
+      `/TicketTraking?companyId=eq.${q.companyId}&createdAt=gte.${startIso}&createdAt=lt.${endIso}&select=queuesIds,nextQueuesIds`,
       1000,
       6,
     ).then((r) => r.data),
@@ -72,7 +100,7 @@ export async function fetchAtendimento(q: AtendimentoQuery): Promise<Atendimento
 
   // Distribuição por fila
   const queueNameById = new Map<number, string>();
-  for (const q of queuesRaw) queueNameById.set(q.id, q.name);
+  for (const queue of queuesRaw) queueNameById.set(queue.id, queue.name);
 
   const ticketsByQueue = new Map<number | null, { total: number; closed: number; pending: number }>();
   let total = 0;
@@ -121,13 +149,14 @@ export async function fetchAtendimento(q: AtendimentoQuery): Promise<Atendimento
   const pctWithUser = total > 0 ? withUserCount / total : 0;
   const mode: "ia" | "humano" = pctWithUser < 0.2 ? "ia" : "humano";
 
-  // TPR sample
-  const tpr = await sampleTpr(q.companyId, t30);
+  // TPR sample na janela
+  const tpr = await sampleTpr(q.companyId, startIso, endIso);
 
   const result: AtendimentoResponse = {
+    range,
     mode,
     iaAttribution: { totalTickets: total, withUser: withUserCount, pct: pctWithUser },
-    tickets30d: { total, closed, pending },
+    ticketsInRange: { total, closed, pending },
     tprSample: { medianSec: tpr.median, p90Sec: tpr.p90, n: tpr.n },
     filas,
     semFila: { total: semFilaTotal, pct: total > 0 ? semFilaTotal / total : 0 },

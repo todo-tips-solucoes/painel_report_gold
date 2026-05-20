@@ -1,7 +1,11 @@
 import { z } from "zod";
 
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+
 export const pipelineQuerySchema = z.object({
   companyId: z.coerce.number().int().positive(),
+  from: z.string().regex(ISO_DATE).optional(),
+  to: z.string().regex(ISO_DATE).optional(),
 });
 
 export type PipelineQuery = z.infer<typeof pipelineQuerySchema>;
@@ -29,6 +33,7 @@ export type Oportunidade = {
 };
 
 export type PipelineResponse = {
+  range: { from: string; to: string };
   total: number;
   valorTotal: number;
   porEtapa: StageStats[];

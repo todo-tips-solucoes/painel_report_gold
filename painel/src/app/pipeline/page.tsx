@@ -21,6 +21,8 @@ import {
   parseFetchError,
 } from "@/components/report-error-state";
 import { InfoTooltip } from "@/components/ui/info-tooltip";
+import { PeriodChips } from "@/components/period-chips";
+import { rangeLastNDays } from "@/lib/date-presets";
 import { fmtCurrencyBRL, fmtDateTime, fmtNumber } from "@/lib/format";
 import type { PipelineResponse } from "@/schemas/pipeline";
 
@@ -52,11 +54,14 @@ export default function PipelinePage() {
   const queryClient = useQueryClient();
   const [page, setPage] = React.useState(1);
   const [pageSize, setPageSize] = React.useState(25);
+  // Default 90d: oportunidades costumam ter ciclo mais longo que tickets.
+  const [range, setRange] = React.useState(() => rangeLastNDays(90));
 
+  const qs = `companyId=${companyId}&from=${range.from}&to=${range.to}`;
   const query = useQuery<PipelineResponse>({
-    queryKey: ["pipeline", companyId],
+    queryKey: ["pipeline", companyId, range.from, range.to],
     queryFn: async () => {
-      const r = await fetch(`/api/kpis/pipeline?companyId=${companyId}`);
+      const r = await fetch(`/api/kpis/pipeline?${qs}`);
       if (!r.ok) throw new Error(`Falha ${r.status}: ${await r.text()}`);
       return r.json();
     },
@@ -139,6 +144,12 @@ export default function PipelinePage() {
           onRefresh={handleRefresh}
         />
       </header>
+
+      <PeriodChips
+        value={range}
+        onChange={setRange}
+        hint="filtra oportunidades por data de criação"
+      />
 
       {/* Banner de subutilização — alerta acionável inspirado nos "Alertas Ativos" */}
       {isUnderused && (

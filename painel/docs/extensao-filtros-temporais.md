@@ -47,11 +47,13 @@ Hoje só `/por-origem` aceita `from`/`to`. As outras 4 páginas (`/`, `/atendime
 - Renomear campos ou parametrizar: `tickets30d` → `ticketsInRange`, ajustar UI.
 - Status Cards (Em atendimento/Aguardando/Fechados) já são **estado instantâneo** — não devem mudar com período. Manter separados visualmente do bloco filtrável.
 
-**`/conexoes`** — status por canal
+**`/conexoes`** — status por canal · **NÃO ESTENDIDA (decisão)**
 
 - Status atual é instantâneo (online/offline). **Não** depende de período.
-- `volume24h/7d/30d` são fixos por design; manter.
-- Filtro temporal aqui faz pouco sentido. Sugestão: **não adicionar** chips nesta página. Documentar.
+- `volume24h/7d/30d` são fixos por design (mostra carga relativa em 3 escalas comparáveis).
+- `tmaMedianSec` e `messagesLost30d` por canal são janelas fixas.
+- Adicionar PeriodChips aqui criaria confusão: o user veria volume24h e volume30d (fixos) + messagesLost (variável). Inconsistente.
+- **Decisão**: manter `/conexoes` sem PeriodChips. A página é um snapshot operacional, não um relatório analítico.
 
 **`/pipeline`** — funil comercial
 

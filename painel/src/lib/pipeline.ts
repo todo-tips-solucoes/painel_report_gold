@@ -1,5 +1,7 @@
 import { pgrstGet, pgrstGetAllPaginated } from "./pgrst";
 import { cacheGet, cacheSet } from "./cache";
+import { brtStartOfDay, brtEndOfDayExclusive, brtToday } from "./brt";
+import { rangeLastNDays } from "./date-presets";
 import type {
   PipelineQuery,
   PipelineResponse,
@@ -41,14 +43,35 @@ type OppRaw = {
   ticketId: number;
 };
 
+/**
+ * Resolve `from`/`to` opcionais para uma janela ISO UTC.
+ * Default quando ambos ausentes: últimos 90 dias (oportunidades costumam ter
+ * vida útil maior que o ciclo operacional de 30 dias).
+ */
+function resolveWindow(
+  from?: string,
+  to?: string,
+): { range: { from: string; to: string }; startIso: string; endIso: string } {
+  const today = brtToday();
+  const defaults = rangeLastNDays(90);
+  const f = from ?? defaults.from;
+  const t = to ?? today;
+  return {
+    range: { from: f, to: t },
+    startIso: brtStartOfDay(f),
+    endIso: brtEndOfDayExclusive(t),
+  };
+}
+
 export async function fetchPipeline(q: PipelineQuery): Promise<PipelineResponse> {
-  const key = `pipeline|${q.companyId}|${new Date().toISOString().slice(0, 13)}`;
+  const { range, startIso, endIso } = resolveWindow(q.from, q.to);
+  const key = `pipeline|${q.companyId}|${range.from}|${range.to}|${new Date().toISOString().slice(0, 13)}`;
   const cached = cacheGet<PipelineResponse>(key);
   if (cached) return cached;
 
   const [opps, lanes] = await Promise.all([
     pgrstGetAllPaginated<OppRaw>(
-      `/Oportunidades?companyId=eq.${q.companyId}&select=id,name,etapadofunil,produto,fonte,campanha,valor,userId,createdAt,contactId,ticketId&order=createdAt.desc`,
+      `/Oportunidades?companyId=eq.${q.companyId}&createdAt=gte.${startIso}&createdAt=lt.${endIso}&select=id,name,etapadofunil,produto,fonte,campanha,valor,userId,createdAt,contactId,ticketId&order=createdAt.desc`,
       1000,
       4,
     ).then((r) => r.data),
@@ -120,6 +143,7 @@ export async function fetchPipeline(q: PipelineQuery): Promise<PipelineResponse>
   const valorTotal = oportunidades.reduce((a, o) => a + (o.valorParsed ?? 0), 0);
 
   const result: PipelineResponse = {
+    range,
     total,
     valorTotal,
     porEtapa,
