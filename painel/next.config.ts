@@ -1,31 +1,20 @@
 import type { NextConfig } from "next";
 
-const allowed = (process.env.ALLOWED_IFRAME_ORIGINS || "")
-  .split(",")
-  .map((s) => s.trim())
-  .filter(Boolean);
-
-const frameAncestors = allowed.length > 0 ? allowed.join(" ") : "'self'";
-
+/**
+ * Headers de segurança (Content-Security-Policy com frame-ancestors,
+ * X-Content-Type-Options, Referrer-Policy) são aplicados em runtime pelo
+ * `src/middleware.ts` — não aqui no next.config.
+ *
+ * Motivo: `headers()` do next.config é avaliado em BUILD time. No Docker, o
+ * `.env` está no `.dockerignore`, então durante `next build`
+ * ALLOWED_IFRAME_ORIGINS fica vazio e o CSP ficava 'self' fixo no bundle
+ * mesmo com env_file populada em runtime. Migrado para middleware resolve:
+ * env é lida a cada request, mudanças no .env só exigem restart do container.
+ */
 const nextConfig: NextConfig = {
   output: "standalone",
   reactStrictMode: true,
   poweredByHeader: false,
-  async headers() {
-    return [
-      {
-        source: "/(.*)",
-        headers: [
-          {
-            key: "Content-Security-Policy",
-            value: `frame-ancestors ${frameAncestors};`,
-          },
-          { key: "X-Content-Type-Options", value: "nosniff" },
-          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-        ],
-      },
-    ];
-  },
 };
 
 export default nextConfig;
