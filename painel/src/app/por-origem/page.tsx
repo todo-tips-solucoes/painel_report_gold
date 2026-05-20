@@ -15,20 +15,8 @@ import {
   ReportErrorState,
   parseFetchError,
 } from "@/components/report-error-state";
+import { defaultRange } from "@/lib/date-presets";
 import type { PorOrigemResponse } from "@/schemas/por-origem";
-
-const MS_PER_DAY = 24 * 3600 * 1000;
-const BRT_OFFSET_MS = 3 * 3600 * 1000;
-
-// Data em BRT (UTC-3) no formato YYYY-MM-DD, independente do fuso do browser.
-function brtIso(daysAgo = 0): string {
-  return new Date(Date.now() - BRT_OFFSET_MS - daysAgo * MS_PER_DAY)
-    .toISOString()
-    .slice(0, 10);
-}
-function todayIso() {
-  return brtIso(0);
-}
 
 function buildQs(params: Record<string, string | number | undefined>): string {
   const sp = new URLSearchParams();
@@ -42,10 +30,9 @@ function buildQs(params: Record<string, string | number | undefined>): string {
 export default function PorOrigemPage() {
   const { companyId } = useIframeParams();
   const queryClient = useQueryClient();
-  const [filters, setFilters] = React.useState<Filters>({
-    from: brtIso(90),
-    to: todayIso(),
-    bucket: "all",
+  const [filters, setFilters] = React.useState<Filters>(() => {
+    const { from, to } = defaultRange();
+    return { from, to, bucket: "all" };
   });
   const [page, setPage] = React.useState(1);
   const pageSize = 50;
