@@ -1,6 +1,9 @@
+name: painel-gold
+
 services:
   painel:
     build: .
+    image: painel-gold:latest
     container_name: painel-relatorios
     restart: unless-stopped
     env_file:
