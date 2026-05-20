@@ -166,7 +166,7 @@ export default function ConexoesPage() {
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             {companyId
-              ? `Empresa ${label} · status, carga e qualidade por canal`
+              ? `${label} · status, carga e qualidade por canal`
               : "Status, carga e qualidade por canal"}
           </p>
         </div>

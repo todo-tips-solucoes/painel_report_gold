@@ -31,7 +31,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             className="font-semibold text-sm max-w-[40ch] truncate"
             title={company?.namecomplete || company?.name || undefined}
           >
-            Empresa <span className="text-primary">{label}</span>
+            <span className="text-primary">{label}</span>
           </div>
           <nav className="flex flex-wrap gap-1">
             {NAV.map((n) => {

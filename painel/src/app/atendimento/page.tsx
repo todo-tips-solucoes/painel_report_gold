@@ -219,7 +219,7 @@ export default function AtendimentoPage() {
           </div>
           <p className="mt-1 text-sm text-muted-foreground">
             {companyId
-              ? `Empresa ${label} · ${fmtNumber(data.ticketsInRange.total)} tickets no período`
+              ? `${label} · ${fmtNumber(data.ticketsInRange.total)} tickets no período`
               : `${fmtNumber(data.ticketsInRange.total)} tickets no período`}
           </p>
         </div>

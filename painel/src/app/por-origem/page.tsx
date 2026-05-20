@@ -114,7 +114,7 @@ export default function PorOrigemPage() {
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             {companyId
-              ? `Empresa ${label} · contatos do período, classificados por médico e tag CRM`
+              ? `${label} · contatos do período, classificados por médico e tag CRM`
               : "Contatos do período, classificados por médico e tag CRM"}
           </p>
         </div>

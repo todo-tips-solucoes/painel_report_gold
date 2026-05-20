@@ -194,7 +194,7 @@ export default function HomePage() {
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             {companyId
-              ? `Empresa ${label} · resumo dos últimos 30 dias`
+              ? `${label} · resumo dos últimos 30 dias`
               : "Resumo dos últimos 30 dias"}
           </p>
         </div>

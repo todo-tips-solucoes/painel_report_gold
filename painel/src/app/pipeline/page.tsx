@@ -136,7 +136,7 @@ export default function PipelinePage() {
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             {companyId
-              ? `Empresa ${label} · oportunidades e estágios do funil`
+              ? `${label} · oportunidades e estágios do funil`
               : "Oportunidades e estágios do funil"}
           </p>
         </div>
