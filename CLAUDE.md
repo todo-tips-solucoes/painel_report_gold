@@ -141,3 +141,4 @@ Local dev: `cp .env.example .env && chmod 600 .env`. The repo holds a working `.
 - `PROGRESSO_SPRINTS.md` in `painel/` has the original sprint planning, optimization history (e.g., `pgrstGetAllPaginated` brought a query from 75s → 4.2s), and operational findings about `companyId=20`.
 - `painel/README.md` is concise and accurate; treat it as authoritative for iframe params and env vars.
 - `.impeccable/critique/*` holds historical design critiques per page (slug-based filenames). Useful to understand why specific design decisions were made.
+- `internal/sql/por-origem-reconstruida.sql` (gitignored, local-only) — referência canônica do SELECT que originou a página `/por-origem`. Equivalente em comportamento ao código em `src/lib/por-origem.ts`. Útil quando precisar entender a regra original ou portar a lógica para outro consumidor.
