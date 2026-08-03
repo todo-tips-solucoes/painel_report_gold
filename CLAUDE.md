@@ -4,25 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository layout
 
-The repo root is `/var/lib/report_chat/`. The actual Next.js app lives in `painel/`. Most work happens under `painel/`.
-
-- `painel/` — Next.js 15 app (App Router, standalone build target)
-- `PRODUCT.md`, `DESIGN.md` — design system context (loaded by the `impeccable` skill)
-- `.impeccable/` — design-system sidecar + critique snapshots
-- `painel/.env` — secrets for the BFF (gitignored, mode 600). `.env.example` is the template.
+The Next.js app lives in `painel/`; most work happens there. `PRODUCT.md` / `DESIGN.md` at the repo root are design-system context (loaded by the `impeccable` skill). `painel/.env` holds BFF secrets (gitignored, mode 600) — `.env.example` is the template.
 
 ## Commands
 
-Run from `painel/`:
-
-```bash
-npm run dev         # next dev (hot reload)
-npm run build       # next build (standalone output)
-npm run start       # next start (production)
-npm run lint        # next lint
-npm run typecheck   # tsc --noEmit (no formal test suite; typecheck is the gate)
-docker compose up -d --build   # production deploy
-```
+Run from `painel/`. Standard npm scripts (see `package.json`), plus `docker compose up -d --build` for the production deploy.
 
 There is no test framework configured. `typecheck` is the safety net — keep it green on every change.
 
@@ -73,15 +59,7 @@ To re-enable: uncomment the two BASIC_AUTH lines in `painel/.env` and `docker co
 
 ## Page / data flow
 
-Routes and what each consumes:
-
-| Route | API | Lib | Schema |
-|---|---|---|---|
-| `/` (Home) | `/api/kpis/home` | `src/lib/home.ts` | `src/schemas/home.ts` |
-| `/por-origem` | `/api/por-origem` + `/api/por-origem/export` | `src/lib/por-origem.ts` | `src/schemas/por-origem.ts` |
-| `/atendimento` | `/api/kpis/atendimento` | `src/lib/atendimento.ts` | `src/schemas/atendimento.ts` |
-| `/conexoes` | `/api/kpis/conexoes` | `src/lib/conexoes.ts` | `src/schemas/conexoes.ts` |
-| `/pipeline` | `/api/kpis/pipeline` | `src/lib/pipeline.ts` | `src/schemas/pipeline.ts` |
+Each page maps 1:1 to a route handler under `src/app/api/`, a lib in `src/lib/`, and a Zod schema in `src/schemas/` sharing the same name.
 
 Médicos (external API, not PostgREST): `src/lib/medicos.ts` fetches `MEDICOS_API_URL`, indexes by `tagId`, caches 24h. `/api/medicos` returns the cached index; `/api/medicos/refresh` (POST) invalidates and rebuilds. The "Médicos" refresh button in `/por-origem` filters calls this.
 
