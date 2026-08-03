@@ -32,7 +32,7 @@ The JWT secret **never leaves the server**. If you're tempted to fetch PostgREST
 
 Every page expects `?companyId=N` (Zod-coerced integer). Also accepted: `backendURL`, `user_LoggedName`, `user_LoggedLevel` (`admin` | `super` | `user`). Parsed in `src/components/iframe-context.tsx` → `useIframeParams()`. Invalid params render an error card with field-level Zod messages instead of crashing.
 
-CSP `frame-ancestors` in `next.config.ts` restricts which origins can embed. Controlled by `ALLOWED_IFRAME_ORIGINS` (comma-separated). Default is `'self'`.
+CSP `frame-ancestors` is built at runtime in `src/middleware.ts` (not in `next.config.ts` — `headers()` there runs at build time, when `.env` is dockerignored). Controlled by `ALLOWED_IFRAME_ORIGINS` (comma-separated). Default is `'self'`.
 
 `companyId=20` is the CLIENTE_X operation (100% IA, no human operators in attribution). It's the canonical test tenant.
 
@@ -69,11 +69,7 @@ Médicos (external API, not PostgREST): `src/lib/medicos.ts` fetches `MEDICOS_AP
 
 In `src/components/`:
 
-- `freshness-indicator.tsx` — `<FreshnessIndicator>` + `useFreshnessClock()` + `STALE_THRESHOLD_MS`. Pop on header to show "Atualizado às HH:mm" + refresh button; tom turns warning after threshold automatically.
-- `report-error-state.tsx` — `<ReportErrorState>` + `parseFetchError()`. Parses `"Falha 502: ..."` errors into categorized UI with retry + collapsed technical details. Use when `isError && !data`.
-- `kpi-card.tsx` — `<KpiCard>` primitive. Supports `variant="hero"` (large display value), `help` (renders `<InfoTooltip>` next to label), `delta` (up/down/flat indicator), `children` slot. Foundation for the hierarchy-opinated dashboard look.
-- `ui/info-tooltip.tsx` — `<InfoTooltip>`, CSS-only (no Radix). Activates on hover + `:focus-within` (keyboard accessible).
-- `ui/badge.tsx` — variants: `default | subtle | primary | success | warning | destructive`. **Use `subtle` for high-density lists** (table tags, etc) to avoid Telemetry Blue overdose.
+`freshness-indicator.tsx`, `report-error-state.tsx`, `kpi-card.tsx`, `ui/info-tooltip.tsx`, `ui/badge.tsx`. Read the file before building an equivalent.
 
 `fmtNumber`, `fmtDuration`, `fmtPercent`, `fmtCurrencyBRL`, `fmtDateTime`, `fmtPhone` live in `src/lib/format.ts`. Use them consistently — never call `Intl.NumberFormat` ad-hoc.
 
@@ -88,23 +84,6 @@ PRODUCT.md and DESIGN.md at the repo root encode the design system. Highlights:
 - **No border-left/right > 1px as accent stripes** (absolute ban from the design system).
 - **Hierarchy via scale + weight contrast** (ratio ≥1.25 between steps). Pages use a "hero KPI" pattern that picks dynamically based on data state — see `pickHero()` functions in each page for the convention.
 - **Glossário (`<details>`)** at the bottom of report pages explains domain terms (Ticket, TMA, p90, etc).
-
-## Environment variables
-
-Required (validated by `src/lib/env.ts`):
-
-```
-PGRST_BASE_URL          # PostgREST root
-PGRST_JWT_SECRET        # HS256 secret (sourced from /var/lib/report_chat/.pgrst.env)
-PGRST_ROLE              # role claim baked into the signed JWT
-MEDICOS_API_URL         # external API for médicos list
-MEDICOS_CACHE_TTL_HOURS # default 24
-ALLOWED_IFRAME_ORIGINS  # comma-separated; controls CSP frame-ancestors
-BASIC_AUTH_USER, BASIC_AUTH_PASS  # Basic Auth middleware (omit for local-only)
-PORT                    # default 3000
-```
-
-Local dev: `cp .env.example .env && chmod 600 .env`. The repo holds a working `.env` in `painel/.env`.
 
 ## Operational notes (non-obvious)
 
