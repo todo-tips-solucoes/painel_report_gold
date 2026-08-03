@@ -5,7 +5,9 @@ export const porOrigemQuerySchema = z.object({
   from: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   to: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   medicoTagId: z.coerce.number().int().positive().optional(),
-  uf: z.string().length(2).optional(),
+  // Não é sempre sigla de 2 letras: médicos de tipo "Exterior" usam nomes de
+  // país ("EUA", "Portugal", "Emirados Árabes"), que o select de filtros oferece.
+  uf: z.string().min(1).max(40).optional(),
   tipo: z.string().optional(),
   bucket: z.enum(["all", "with_medico", "without_medico", "with_crm"]).default("all"),
   page: z.coerce.number().int().min(1).default(1),
@@ -21,6 +23,7 @@ export const porOrigemRowSchema = z.object({
   createdAt: z.string(),
   tags_crm: z.array(z.string()),
   medicos: z.array(z.string()),
+  ufs: z.array(z.string()),
 });
 
 export type PorOrigemRow = z.infer<typeof porOrigemRowSchema>;

@@ -28,6 +28,7 @@ export async function GET(req: Request) {
       "Data cadastro": fmtDateTime(r.createdAt),
       "Tags CRM": r.tags_crm.join(", "),
       "Médico(s)": r.medicos.join(", "),
+      "UF": r.ufs.join(", "),
     }));
 
     // Node Buffer compartilha ArrayBufferLike (possivelmente SharedArrayBuffer)
@@ -58,6 +59,7 @@ export async function GET(req: Request) {
       { wch: 20 },
       { wch: 40 },
       { wch: 50 },
+      { wch: 12 },
     ];
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Por Origem");

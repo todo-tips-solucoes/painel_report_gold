@@ -76,6 +76,7 @@ async function fetchContactIdsByMedicoTag(q: PorOrigemQuery): Promise<number[]> 
 function rowFromContact(c: ContactWithEmbedded, medicos: MedicoIndex): PorOrigemRow {
   const medicoSet = new Set<string>();
   const crmSet = new Set<string>();
+  const ufSet = new Set<string>();
   for (const t of c.Tickets || []) {
     if (t.companyId !== c.companyId) continue;
     for (const tt of t.TicketTags || []) {
@@ -84,6 +85,12 @@ function rowFromContact(c: ContactWithEmbedded, medicos: MedicoIndex): PorOrigem
       const display = medicos.displayByTagId.get(tag.id);
       if (display) {
         medicoSet.add(display);
+        // Um tagId pode agrupar vários médicos (byTagId é lista) com UFs
+        // distintas. Mantém o valor cru: normalizar em maiúsculas quebraria
+        // nomes de país ("Emirados Árabes").
+        for (const m of medicos.byTagId.get(tag.id) ?? []) {
+          if (m.uf) ufSet.add(m.uf);
+        }
       } else if (tag.tagType === "CRM") {
         crmSet.add(tag.name);
       }
@@ -96,6 +103,7 @@ function rowFromContact(c: ContactWithEmbedded, medicos: MedicoIndex): PorOrigem
     createdAt: c.createdAt,
     tags_crm: [...crmSet].sort(),
     medicos: [...medicoSet].sort(),
+    ufs: [...ufSet].sort(),
   };
 }
 

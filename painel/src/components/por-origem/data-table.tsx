@@ -102,6 +102,15 @@ const columns: ColumnDef<PorOrigemRow>[] = [
     ),
   },
   {
+    accessorKey: "ufs",
+    header: "UF",
+    cell: ({ row }) => (
+      <span className="text-sm whitespace-nowrap">
+        {row.original.ufs.join(", ") || "—"}
+      </span>
+    ),
+  },
+  {
     accessorKey: "tags_crm",
     header: "Tags CRM",
     cell: ({ row }) => (
